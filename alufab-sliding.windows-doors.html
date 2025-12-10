@@ -1,0 +1,1008 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>StepInAluFab — v1.0.3</title>
+
+    <script>
+        if (!sessionStorage.getItem('saf_logged_in')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #071028;
+            --panel: #0b1624;
+            --accent: #06b6d4;
+            --muted: #95a6b6;
+            --card: #071726;
+            --text: #eaf6fb;
+        }
+
+        [data-theme="light"] {
+            --bg: #f7fafc;
+            --panel: #fff;
+            --card: #f2f7fb;
+            --accent: #0ea5e9;
+            --muted: #50657a;
+            --text: #031024;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+            margin: 0;
+            padding: 12px;
+            background: linear-gradient(180deg, var(--bg), #041023);
+            color: var(--text);
+        }
+
+        .wrap {
+            max-width: 1150px;
+            margin: 0 auto
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px
+        }
+
+        .logo-svg {
+            height: 130px;
+            width: 300px;
+            flex: 0 0 48px;
+            object-fit: contain;
+        }
+
+        h1 {
+            font-size: 18px;
+            margin: 0
+        }
+
+        .tabs {
+            margin-left: auto;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            padding: 8px 10px;
+            border-radius: 8px;
+            cursor: pointer
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text)
+        }
+
+        .btn {
+            background: var(--accent);
+            color: #062024;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--muted);
+            padding: 8px 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13.33px;
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4)
+        }
+
+        label {
+            display: block;
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 6px
+        }
+
+        input,
+        select,
+        textarea {
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: transparent;
+            color: inherit;
+            width: 100%;
+            font-size: 14px
+        }
+
+        .row {
+            display: flex;
+            gap: 8px;
+            align-items: center
+        }
+
+        .jobs {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px
+        }
+
+        .job {
+            background: var(--card);
+            padding: 10px;
+            border-radius: 8px;
+            display: grid;
+            grid-template-columns: 1fr 160px 80px 48px;
+            gap: 8px;
+            align-items: center
+        }
+
+        .small {
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: 440px 1fr;
+            gap: 12px
+        }
+
+        .result-card {
+            background: var(--panel);
+            padding: 10px;
+            border-radius: 8px
+        }
+
+        .cutbar {
+            height: 14px;
+            display: flex;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 6px
+        }
+
+        .cut {
+            background: var(--accent);
+            height: 100%
+        }
+
+        .rem {
+            background: #333;
+            height: 100%
+        }
+
+        footer {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 18px;
+            text-align: center
+        }
+
+        .hidden {
+            display: none
+        }
+
+        .panel-title {
+            font-weight: 700;
+            margin-bottom: 8px
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px
+        }
+
+        .dash-card {
+            background: var(--card);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center
+        }
+
+        @media(max-width:980px) {
+            .results {
+                grid-template-columns: 1fr
+            }
+
+            .job {
+                grid-template-columns: 1fr 120px 80px 40px
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr
+            }
+
+            header {
+                align-items: flex-start;
+                gap: 8px;
+                flex-direction: column;
+            }
+
+            .tabs {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000
+        }
+
+        .modal {
+            background: var(--panel);
+            padding: 16px;
+            border-radius: 10px;
+            min-width: 260px
+        }
+
+        .segmented {
+            display: flex;
+            gap: 6px
+        }
+
+        .segmented button {
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer
+        }
+
+        .segmented button.active {
+            background: var(--accent);
+            color: #042022;
+            font-weight: 700
+        }
+
+        .glass-wrap {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start
+        }
+
+        .sheet-box {
+            background: #0b1624;
+            padding: 8px;
+            border-radius: 8px
+        }
+
+        .sheet-info {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 8px
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .close-est {
+            background: transparent;
+            border: 1px solid #d7e6ea;
+            color: #062024;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .estimate-page {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            color: #031024;
+            z-index: 12000;
+            overflow: auto;
+            padding: 28px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .estimate-sheet {
+            max-width: 900px;
+            margin: 18px auto;
+            background: #fff;
+            color: #031024;
+            font-family: Inter, Arial, sans-serif;
+            padding: 28px;
+            border-radius: 6px;
+            box-shadow: 0 8px 40px rgba(2, 6, 23, 0.2);
+            position: relative;
+        }
+
+        .estimate-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .est-company {
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: 0.6px;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 8px;
+        }
+
+        .est-meta {
+            font-size: 14px;
+            color: #405662;
+        }
+
+        .est-meta div {
+            margin-bottom: 6px;
+        }
+
+        .est-toolbar {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin: 12px 0;
+        }
+
+        .est-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .est-table th,
+        .est-table td {
+            border: 1px solid #d7e6ea;
+            padding: 8px 10px;
+            text-align: left;
+            min-width: 80px;
+        }
+
+        .est-table th {
+            background: #f4fbfd;
+            color: #062024;
+        }
+
+        .est-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 18px;
+        }
+
+        .est-totals {
+            text-align: right;
+            font-weight: 700;
+            margin-top: 12px;
+            color: #062024;
+        }
+
+        .est-watermark {
+            position: absolute;
+            left: 50%;
+            top: 45%;
+            transform: translate(-50%, -50%) rotate(-12deg);
+            opacity: 0.06;
+            font-size: 72px;
+            color: #062024;
+            pointer-events: none;
+            user-select: none;
+            font-weight: 800;
+        }
+
+        .report-page {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            color: #031024;
+            z-index: 11000;
+            overflow: auto;
+            padding: 28px;
+        }
+
+        .report-sheet {
+            max-width: 900px;
+            margin: 18px auto;
+            background: #fff;
+            color: #031024;
+            font-family: Inter, Arial, sans-serif;
+            padding: 28px;
+            border-radius: 6px;
+            box-shadow: 0 8px 40px rgba(2, 6, 23, 0.2);
+        }
+
+        .report-header {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            border-bottom: 1px solid #d7e6ea;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+        }
+
+        .report-toolbar {
+            margin: 18px 0;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        #jobReportContent {
+            font-size: 14px;
+        }
+
+        #jobReportContent hr {
+            border: 0;
+            border-top: 1px solid #eee;
+            margin: 12px 0;
+        }
+
+        #jobReportContent .cutbar {
+            margin-top: 2px;
+            height: 10px;
+        }
+
+        #jobReportContent strong {
+            color: #031024;
+        }
+
+        .report-page .btn {
+            background: #0ea5e9;
+            color: #fff;
+            border: none;
+            font-weight: normal;
+        }
+
+        .report-page .close-est {
+            background: transparent;
+            border: 1px solid #d7e6ea;
+            color: #062024;
+        }
+
+        @media(max-width:720px) {
+
+            .estimate-sheet,
+            .report-sheet {
+                padding: 16px;
+                margin: 8px;
+            }
+
+            .est-watermark {
+                font-size: 44px;
+                top: 50%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 8px;
+            }
+
+            h1 {
+                font-size: 16px;
+            }
+
+            .card {
+                padding: 10px;
+            }
+
+            .tabs {
+                gap: 4px;
+                justify-content: flex-start;
+            }
+
+            .tab-btn,
+            .btn,
+            .btn-ghost {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+
+            .card>div:first-child {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+                margin-left: 0 !important;
+                margin-top: 12px;
+            }
+
+            .controls>div {
+                width: 100% !important;
+            }
+
+            .job {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .job>div:last-child {
+                justify-self: end;
+            }
+
+            .glass-wrap {
+                flex-direction: column;
+            }
+
+            #panel_feedback .card>div[style*="grid"] {
+                grid-template-columns: 1fr !important;
+            }
+
+            .estimate-header,
+            .est-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .est-controls>div {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            .est-totals {
+                text-align: left;
+                margin-top: 18px;
+            }
+
+            .est-table th,
+            .est-table td {
+                min-width: 65px;
+                padding: 6px 8px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body data-theme="dark">
+    <div class="wrap">
+        <header>
+            <img src="C:\Users\Mr. Wagya Stephen\Pictures\Saved Pictures\logo.alu.jpg" alt="StepInAluFab Logo"
+                class="logo-svg">
+
+            <div>
+                <h1>AluFab — Sliding Window and Door Calculator</h1>
+                <div class="small muted">by Stephen Tekonembe Wagya • v1.0.3</div>
+            </div>
+
+            <div class="tabs" role="navigation" aria-label="Main navigation">
+
+                <a href="index.html" class="btn-ghost">Home</a>
+
+                <button class="tab-btn active" data-panel="calculator">Calculator</button>
+                <button class="tab-btn" data-panel="glass">Glass Layout</button>
+                <button class="tab-btn" data-panel="dashboard">Dashboard</button>
+                <button class="tab-btn" data-panel="about">About</button>
+                <button class="tab-btn" data-panel="feedback">Feedback</button>
+                <button id="makeEstimateBtn" class="btn" title="Create estimate">Make Estimate</button>
+                <select id="langSel" title="Language" style="margin-left:8px">
+                    <option value="en">EN</option>
+                    <option value="ak">AK</option>
+                </select>
+                <button id="themeToggle" class="btn-ghost" title="Toggle theme">Dark/Light</button>
+            </div>
+        </header>
+
+        <div id="appRoot">
+            <div id="panel_calculator">
+                <div class="card">
+                    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                        <button class="btn" id="addJobBtn">+ Add Window</button>
+                        <button class="btn" id="calcAllBtn">Calculate All</button>
+                        <button class="btn-ghost" id="exportCsvBtn">Export CSV</button>
+                        <button class="btn-ghost" id="printBtn">View Report</button>
+                        <button class="btn-ghost" id="saveProjectBtn">Save Project</button>
+                        <div style="margin-left:auto" class="controls">
+                            <div style="width:120px"><label>Mode</label><select id="modeSelect">
+                                    <option value="window">Window</option>
+                                    <option value="door">Door</option>
+                                </select></div>
+                            <div style="width:120px"><label>Units</label><select id="unit">
+                                    <option value="mm">mm</option>
+                                    <option value="cm">cm</option>
+                                    <option value="in">in</option>
+                                </select></div>
+                            <div style="width:160px"><label>Profile stock length (mm)</label><input id="stockLen"
+                                    type="number" value="5800" /></div>
+                        </div>
+                    </div>
+                    <div style="margin-top:10px;display:flex;gap:12px;align-items:center; flex-wrap:wrap;">
+                        <div style="width:240px"><label>Select leaf type</label>
+                            <div style="display:flex;gap:8px"><button id="leafSelectBtn" class="btn-ghost">Choose leaf
+                                    type</button>
+                                <div id="leafChosen" class="small muted">Normal</div>
+                            </div>
+                        </div>
+                        <div style="width:220px"><label>Cover allowance?</label><select id="coverMode">
+                                <option value="none">No</option>
+                                <option value="add50">Yes — add 50 mm</option>
+                            </select></div>
+                    </div>
+                    <div class="jobs" id="jobsList" style="margin-top:12px"></div>
+                    <div id="inputHint" class="small muted" style="margin-top:8px">Add measurements then press
+                        <strong>Calculate All</strong>.
+                    </div>
+                </div>
+                <div class="results" style="margin-top:12px">
+                    <div>
+                        <div class="result-card">
+                            <h3 class="panel-title">Per-window Results</h3>
+                            <div id="perJobResults" class="small muted">No calculations yet.</div>
+                        </div>
+                        <div class="card" style="margin-top:10px">
+                            <h4 style="margin:0 0 8px 0">Saved Projects</h4>
+                            <div id="projectList" class="small muted"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="result-card">
+                            <h3 class="panel-title">Stock & Totals</h3>
+                            <div id="stockResults" class="small muted">No calculations yet.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="panel_glass" class="hidden">
+                <div class="card">
+                    <div
+                        style="display:flex;justify-content:space-between;align-items:center; flex-wrap:wrap; gap:10px;">
+                        <div>
+                            <h3 class="panel-title">Glass Layout — Full Sheet (3330 × 2250 mm)</h3>
+                            <div class="small muted">Visual packing of glass pieces on standard sheets.</div>
+                        </div>
+                        <div style="display:flex;gap:8px;align-items:center"><button id="refreshLayoutBtn"
+                                class="btn">Refresh Layout</button><button id="downloadLayoutBtn"
+                                class="btn-ghost">Download SVG</button></div>
+                    </div>
+                    <div style="margin-top:12px" class="glass-wrap">
+                        <div class="sheet-box" id="sheetContainer" style="flex:3"></div>
+                        <div style="flex:2">
+                            <div class="card">
+                                <div class="panel-title">Pieces summary</div>
+                                <div id="piecesSummary" class="small muted">No pieces.</div>
+                            </div>
+                            <div class="card" style="margin-top:12px">
+                                <div class="panel-title">Layout Info</div>
+                                <div id="sheetInfo" class="small muted">Press Calculate All then Refresh Layout.</div>
+                            </div>
+                            <div class="card" style="margin-top:12px">
+                                <div class="panel-title">Layout options</div>
+                                <div style="display:flex;gap:8px;align-items:center; flex-wrap:wrap;"><label
+                                        class="small muted">Spacing (mm)</label><input id="layoutSpacing" type="number"
+                                        value="10" style="width:100px" /><label class="small muted">Rotate if
+                                        fits?</label><select id="allowRotate">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="panel_dashboard" class="hidden">
+                <div class="card">
+                    <div class="panel-title">Dashboard</div>
+                    <div class="dashboard-grid" id="dashboardGrid">
+                        <div class="dash-card">
+                            <div class="small muted">Saved Projects</div>
+                            <div id="dash_projects" style="font-size:20px;font-weight:700">0</div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="small muted">Total Frame Length (mm)</div>
+                            <div id="dash_frame" style="font-size:20px;font-weight:700">0</div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="small muted">Estimated Total Bars</div>
+                            <div id="dash_bars" style="font-size:20px;font-weight:700">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="panel_about" class="hidden">
+                <div class="card">
+                    <div style="display:flex;gap:12px;align-items:center">
+                        <div>
+                            <h2 style="margin:0">StepInAluFab</h2>
+                            <div class="small muted">Version 1.0.3 — Developed by Stephen Tekonembe Wagya</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:12px">
+                        <h3 style="margin:0 0 8px 0">About the Creator</h3>
+                        <p><strong>Stephen Tekonembe Wagya</strong><br />Apprentice at Dominic Aluminium & Glass
+                            Fabrication<br />Email:
+                            <strong>stevewagya@gmail.com</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div id="panel_feedback" class="hidden">
+                <div class="card">
+                    <h3 class="panel-title">Feedback & Contact</h3>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                        <div><label>Name</label><input id="fb_name" /></div>
+                        <div><label>Email</label><input id="fb_email" /></div>
+                    </div>
+                    <form action="https://formspree.io/f/mgvgnewn" method="POST">
+
+                        <div style="margin-top:8px"><label>Message</label><textarea id="fb_msg" rows="4"></textarea>
+                        </div>
+                        <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="fb_send">Send
+                                (Email)</button><button class="btn-ghost" id="fb_save">Save locally</button></div>
+                        <div id="fb_status" class="small muted" style="margin-top:8px"></div>
+                </div>
+            </div>
+
+            <footer>
+                <div><strong>StepInAluFab</strong> — Designed & Developed by <strong>Stephen Tekonembe Wagya</strong>
+                </div>
+                <div>Apprentice at <strong>Dominic Aluminium & Glass Fabrication</strong> • <a
+                        href="https://www.facebook.com/profile.php?id=61575054422373">Facebook</a> &bull;
+                    <div style="margin-top:6px;">&copy; 2025 StepInAluFab — Version 1.0.3</div>
+            </footer>
+        </div>
+
+    </div>
+
+    <div id="leafModal" class="hidden" aria-hidden="true">
+        <div class="modal-backdrop" id="leafBackdrop">
+            <div class="modal" role="dialog" aria-modal="true" aria-label="Select leaf type">
+                <div style="margin-bottom:8px"><strong>Select leaf type</strong></div>
+                <div class="segmented" id="leafOptions"><button data-val="normal" class="active">Normal</button><button
+                        data-val="ks50">KS50</button><button data-val="triarco">Triarco</button><button
+                        data-val="3b">3B</button></div>
+                <div style="display:flex;justify-content:flex-end;margin-top:12px"><button id="leafOk"
+                        class="btn">OK</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="estimatePage" class="hidden" aria-hidden="true">
+        <div class="estimate-page">
+            <div class="estimate-sheet" role="document" id="estimateSheet">
+                <div class="est-watermark">StepInAluFab</div>
+                <div class="estimate-header">
+                    <div>
+                        <div class="est-company" id="estCompany" contenteditable="true"
+                            placeholder="Type Your Company Name Here"></div>
+                        <div class="est-meta">
+                            <div><span style="font-weight:600">Company Owner:</span> <span id="estPersonnel"
+                                    contenteditable="true"> </span></div>
+                            <div><span style="font-weight:600">Phone:</span> <span id="estPhone" contenteditable="true">
+                                </span></div>
+                        </div>
+                    </div>
+                    <div style="text-align:right">
+
+                        <img src="C:\Users\Mr. Wagya Stephen\Pictures\Saved Pictures\logo.alu.jpg"
+                            alt="StepInAluFab Logo" style="width: 140px; height: auto; margin-bottom: 8px;">
+
+                        <div style="font-size:13px;margin-top:6px;">
+                            <div><strong>Date:</strong> <span id="estDate" contenteditable="true"></span></div>
+                            <div><strong>Estimate Type:</strong> <span id="estType" contenteditable="true"> </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="est-toolbar" style="margin-top:18px; flex-wrap:wrap;">
+                    <div style="display:flex;gap:8px;align-items:center;"><button id="estAddRow" class="btn-ghost">+ Add
+                            Row</button><button id="estAddCol" class="btn-ghost">+ Add Column</button></div>
+                    <div style="margin-left:auto;display:flex;gap:8px;"><button id="estPrint"
+                            class="btn">Print</button><button id="estDownload" class="btn-ghost">Download
+                            PDF</button><button id="estClose" class="close-est">Close</button></div>
+                </div>
+                <div style="overflow:auto;">
+                    <table class="est-table" id="estTable" aria-label="Estimate table">
+                        <thead>
+                            <tr id="estHeadRow">
+                                <th contenteditable="true"></th>
+                                <th contenteditable="true"></th>
+                                <th contenteditable="true"></th>
+                                <th contenteditable="true"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="estBody">
+                            <tr>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                            </tr>
+                            <tr>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="est-controls">
+                    <div style="max-width:60%">
+                        <div style="margin-top:12px;">
+                            <div><strong>Notes / Terms:</strong></div>
+                            <div contenteditable="true"
+                                style="min-height:48px;border:1px dashed #d7e6ea;padding:8px;margin-top:8px;">Type notes
+                                here...</div>
+                        </div>
+                    </div>
+                    <div style="width:35%;">
+                        <div class="est-totals">
+                            <div>Total Cost of Material: <span id="estTotalMaterial" contenteditable="true"> </span>
+                            </div>
+                            <div style="margin-top:8px;">Workmanship: <span id="estWorkmanship" contenteditable="true">
+                                </span></div>
+                            <div style="margin-top:8px;font-size:18px;">Grand Total: <span id="estGrandTotal"
+                                    contenteditable="true"> </span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="jobReportPage" class="hidden">
+        <div class="report-page">
+            <div class="report-sheet" id="reportSheet">
+                <div class="report-header">
+                    <div id="reportLogoContainer"></div>
+                    <div class="report-titles">
+                        <h2 style="margin:0">StepInAluFab — Job Report</h2>
+                        <div class="small" style="color:#50657a">Prepared by Stephen Tekonembe Wagya<br /><span
+                                id="reportDate"></span></div>
+                    </div>
+                </div>
+                <div id="jobReportContent" style="margin-top:18px"></div>
+                <div class="report-toolbar"><button id="reportPrintBtn" class="btn">Print / Download PDF</button><button
+                        id="reportCloseBtn" class="close-est">Close</button></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function uid(prefix = 'id') { return prefix + '_' + Math.random().toString(36).slice(2, 9) }
+        function round1(n) { return Math.round((n + Number.EPSILON) * 10) / 10 }
+        function clamp(n, min, max) { return Math.max(min, Math.min(max, n)) }
+        function calcProfileUsage(totalLen, stockLen = 5800) { if (!totalLen) return { bars: 0, leftover: 0 }; const rawBars = totalLen / stockLen; const bars = Math.ceil(rawBars * 2) / 2; const leftover = Math.max(0, (bars * stockLen) - totalLen); return { bars, leftover }; }
+        function makeCutBar(usedLen, stockLen) { const usedPerc = clamp((usedLen / stockLen) * 100, 0, 100); const remPerc = 100 - usedPerc; return '<div class="cutbar"><div class="cut" style="width:' + usedPerc + '%"></div><div class="rem" style="width:' + remPerc + '%"></div></div>'; }
+
+        let jobs = [];
+        let projects = JSON.parse(localStorage.getItem('saf_projects') || '[]') || [];
+        let currentLeaf = 'normal';
+
+        const appRoot = document.getElementById('appRoot');
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const jobsList = document.getElementById('jobsList');
+        const addJobBtn = document.getElementById('addJobBtn');
+        const calcAllBtn = document.getElementById('calcAllBtn');
+        const exportCsvBtn = document.getElementById('exportCsvBtn');
+        const printBtn = document.getElementById('printBtn');
+        const saveProjectBtn = document.getElementById('saveProjectBtn');
+        const perJobResults = document.getElementById('perJobResults');
+        const stockResults = document.getElementById('stockResults');
+        const projectList = document.getElementById('projectList');
+        const unitEl = document.getElementById('unit');
+        const stockLenEl = document.getElementById('stockLen');
+        const coverModeEl = document.getElementById('coverMode');
+        const modeSelect = document.getElementById('modeSelect');
+        const leafSelectBtn = document.getElementById('leafSelectBtn');
+        const leafChosen = document.getElementById('leafChosen');
+        const sheetContainer = document.getElementById('sheetContainer');
+        const sheetInfo = document.getElementById('sheetInfo');
+        const piecesSummary = document.getElementById('piecesSummary');
+        const layoutSpacing = document.getElementById('layoutSpacing');
+        const allowRotate = document.getElementById('allowRotate');
+        const refreshLayoutBtn = document.getElementById('refreshLayoutBtn');
+        const downloadLayoutBtn = document.getElementById('downloadLayoutBtn');
+        const dash_projects = document.getElementById('dash_projects');
+        const dash_frame = document.getElementById('dash_frame');
+        const dash_bars = document.getElementById('dash_bars');
+        const fb_name = document.getElementById('fb_name'), fb_email = document.getElementById('fb_email'), fb_msg = document.getElementById('fb_msg'), fb_send = document.getElementById('fb_send'), fb_save = document.getElementById('fb_save'), fb_status = document.getElementById('fb_status');
+        const leafModal = document.getElementById('leafModal'), leafBackdrop = document.getElementById('leafBackdrop'), leafOptions = document.getElementById('leafOptions'), leafOk = document.getElementById('leafOk');
+        const langSel = document.getElementById('langSel');
+        const estimatePage = document.getElementById('estimatePage'), makeEstimateBtn = document.getElementById('makeEstimateBtn'), estClose = document.getElementById('estClose'), estAddRow = document.getElementById('estAddRow'), estAddCol = document.getElementById('estAddCol'), estPrint = document.getElementById('estPrint'), estDownload = document.getElementById('estDownload'), estTable = document.getElementById('estTable'), estHeadRow = document.getElementById('estHeadRow'), estBody = document.getElementById('estBody'), estCompany = document.getElementById('estCompany'), estPersonnel = document.getElementById('estPersonnel'), estPhone = document.getElementById('estPhone'), estDate = document.getElementById('estDate'), estType = document.getElementById('estType'), estTotalMaterial = document.getElementById('estTotalMaterial'), estWorkmanship = document.getElementById('estWorkmanship'), estGrandTotal = document.getElementById('estGrandTotal');
+        const jobReportPage = document.getElementById('jobReportPage'), reportSheet = document.getElementById('reportSheet'), jobReportContent = document.getElementById('jobReportContent'), reportPrintBtn = document.getElementById('reportPrintBtn'), reportCloseBtn = document.getElementById('reportCloseBtn'), reportDate = document.getElementById('reportDate'), reportLogoContainer = document.getElementById('reportLogoContainer');
+
+        tabBtns.forEach(btn => btn.addEventListener('click', () => { tabBtns.forEach(b => b.classList.remove('active')); btn.classList.add('active'); showPanel(btn.dataset.panel); }));
+        function showPanel(name) {
+            document.getElementById('panel_calculator').classList.toggle('hidden', name !== 'calculator');
+            document.getElementById('panel_glass').classList.toggle('hidden', name !== 'glass');
+            document.getElementById('panel_dashboard').classList.toggle('hidden', name !== 'dashboard');
+            document.getElementById('panel_about').classList.toggle('hidden', name !== 'about');
+            document.getElementById('panel_feedback').classList.toggle('hidden', name !== 'feedback');
+            if (name === 'dashboard') refreshDashboard();
+        }
+
+        const themeToggle = document.getElementById('themeToggle');
+        function setTheme(theme) { document.body.setAttribute('data-theme', theme); localStorage.setItem('saf_theme', theme); }
+        themeToggle.addEventListener('click', () => { const cur = document.body.getAttribute('data-theme') || 'dark'; setTheme(cur === 'dark' ? 'light' : 'dark'); }); setTheme(localStorage.getItem('saf_theme') || 'dark');
+
+        function renderJobs() { jobsList.innerHTML = ''; jobs.forEach((job, idx) => { const div = document.createElement('div'); div.className = 'job'; div.innerHTML = `<div><label class="small muted">#${idx + 1} — Label</label><input class="job-label" placeholder="Label" value="${job.label || ''}" /><div style="display:flex;gap:8px;margin-top:8px"><div style="flex:1"><label class="small muted">Frame W</label><input class="job-W" value="${job.W}" /></div><div style="flex:1"><label class="small muted">Frame H</label><input class="job-H" value="${job.H}" /></div></div></div><div><label class="small muted">Leaf type</label><div><button class="btn-ghost choose-leaf">Change</button><span class="small muted" style="margin-left:8px">${job.leafType || 'normal'}</span></div></div><div><label class="small muted">Qty</label><input class="job-qty" value="${job.qty || 1}" /></div><div><button class="btn-ghost remove-job">✕</button></div>`; jobsList.appendChild(div); div.querySelector('.remove-job').addEventListener('click', () => { jobs.splice(idx, 1); renderJobs(); }); div.querySelector('.job-W').addEventListener('input', e => jobs[idx].W = e.target.value); div.querySelector('.job-H').addEventListener('input', e => jobs[idx].H = e.target.value); div.querySelector('.job-qty').addEventListener('input', e => jobs[idx].qty = Math.max(1, Number(e.target.value) || 1)); div.querySelector('.job-label').addEventListener('input', e => jobs[idx].label = e.target.value); div.querySelector('.choose-leaf').addEventListener('click', () => { openLeafModal((val) => { jobs[idx].leafType = val; renderJobs(); }); }); }); }
+        addJobBtn.addEventListener('click', () => { jobs.push({ id: uid(), label: '', W: 1700, H: 1530, qty: 1, leafType: currentLeaf }); renderJobs(); });
+
+        function computeForSliding(frameW, frameH, leafType, coverMode) { let W = Number(frameW), H = Number(frameH); if (coverMode === 'add50') { W += 50; H += 50; } const frame = { width: round1(W), height: round1(H) }; let leafW, leafH, off; if (leafType === '3b') { leafW = (W + 70) / 3; leafH = H - 60; } else { leafW = W / 2; off = 60; if (leafType === 'ks50') off = 70; if (leafType === 'triarco') off = 75; leafH = Math.max(0, H - off); } const leaf = { width: round1(leafW), height: round1(leafH) }; const net = { width: round1(leaf.width), height: round1(Math.max(0, leaf.height - 5)) }; const interlock = { height: round1(leaf.height) }; return { frame, leaf, net, interlock }; }
+
+        let lastPiecesForLayout = [];
+        calcAllBtn.addEventListener('click', () => { if (!jobs.length) { alert('Add at least one job'); return; } const unit = unitEl.value, factor = (unit === 'mm') ? 1 : (unit === 'cm' ? 10 : 25.4); const stockLen = Number(stockLenEl.value) || 5800, coverMode = coverModeEl.value; const perJobHtml = []; let totalFrameLen = 0, totalLeafLen = 0, totalInterLen = 0, totalBars = 0; lastPiecesForLayout = []; jobs.forEach((job, idx) => { const qty = Math.max(1, Number(job.qty) || 1), rawW = Number(job.W), rawH = Number(job.H); if (!(rawW > 0) || !(rawH > 0)) { perJobHtml.push(`<div style="color:var(--danger)">Job #${idx + 1} invalid W/H</div>`); return; } const frameW_mm = rawW * factor, frameH_mm = rawH * factor; const res = computeForSliding(frameW_mm, frameH_mm, job.leafType || 'normal', coverMode); const numLeaves = (job.leafType === '3b') ? 3 : 2; const frameTotal = 2 * (res.frame.width + res.frame.height) * qty, leafTotal = 2 * (res.leaf.width + res.leaf.height) * qty * numLeaves, interTotal = res.interlock.height * qty * 2; totalFrameLen += frameTotal; totalLeafLen += leafTotal; totalInterLen += interTotal; const fU = calcProfileUsage(frameTotal, stockLen), lU = calcProfileUsage(leafTotal, stockLen), iU = calcProfileUsage(interTotal, stockLen); totalBars += (fU.bars + lU.bars + iU.bars); const disp = v => (round1(v / factor)) + ' ' + unit, label = job.label || ('#' + (idx + 1)); for (let q = 0; q < qty * numLeaves; q++) { lastPiecesForLayout.push({ w: res.net.width, h: res.net.height, job: idx + 1, label: label }); } perJobHtml.push(`<div style="margin-bottom:10px"><strong>Job ${idx + 1} — ${label} (qty ${qty})</strong><br />Frame: ${disp(res.frame.width)} × ${disp(res.frame.height)}<br />Leaf (${job.leafType || 'normal'}): ${disp(res.leaf.width)} × ${disp(res.leaf.height)} (${numLeaves} panels)<br />Net (glass): ${disp(res.net.width)} × ${disp(res.net.height)}<br />Interlock H: ${disp(res.interlock.height)}<br /><hr />Frame total ${Math.round(frameTotal)} mm → <b>${fU.bars}</b> bars ${makeCutBar(frameTotal % stockLen, stockLen)}<br />Leaf total ${Math.round(leafTotal)} mm → <b>${lU.bars}</b> bars ${makeCutBar(leafTotal % stockLen, stockLen)}<br />Interlock total ${Math.round(interTotal)} mm → <b>${iU.bars}</b> bars ${makeCutBar(interTotal % stockLen, stockLen)}</div>`); }); perJobResults.innerHTML = perJobHtml.join(''); stockResults.innerHTML = `<div><strong>Totals (mm)</strong><br/>Frame: ${Math.round(totalFrameLen)} | Leaf: ${Math.round(totalLeafLen)} | Interlock: ${Math.round(totalInterLen)}</div><div style="margin-top:8px" class="small muted">Estimated total bars needed: <strong>${totalBars}</strong> (stock ${stockLen} mm)</div>`; updatePiecesSummary(); refreshDashboard(); });
+
+        function updatePiecesSummary() { if (!lastPiecesForLayout.length) { piecesSummary.textContent = 'No pieces.'; return; } const counts = {}; lastPiecesForLayout.forEach(p => { const k = p.w + '×' + p.h; counts[k] = (counts[k] || 0) + 1; }); let html = ''; Object.keys(counts).forEach(k => { html += k + ' mm — ' + counts[k] + ' pcs<br/>'; }); piecesSummary.innerHTML = html; }
+
+        function packPiecesOnSheet(pieces, sheetW, sheetH, spacing, allowRotate) { const placed = []; let x = spacing, y = spacing, rowMaxH = 0; let currentPieces = [...pieces]; currentPieces.sort((a, b) => b.h - a.h); currentPieces.forEach(p => { let w = Number(p.w), h = Number(p.h), rotated = false, fits = (x + w + spacing <= sheetW) && (y + h + spacing <= sheetH); if (!fits && allowRotate) { if ((x + h + spacing <= sheetW) && (y + w + spacing <= sheetH)) { [w, h] = [h, w]; rotated = true; fits = true; } } if (!fits) { x = spacing; y += rowMaxH + spacing; rowMaxH = 0; fits = (x + w + spacing <= sheetW) && (y + h + spacing <= sheetH); if (!fits && allowRotate) { if ((x + h + spacing <= sheetW) && (y + w + spacing <= sheetH)) { [w, h] = [h, w]; rotated = true; fits = true; } } } if (y + h + spacing > sheetH + 0.0001) { placed.push({ ...p, overflow: true }); } else { placed.push({ ...p, x: round1(x), y: round1(y), w: round1(w), h: round1(h), rotated, overflow: false }); x += w + spacing; rowMaxH = Math.max(rowMaxH, h); } }); const maxY = placed.filter(p => !p.overflow).reduce((max, p) => Math.max(max, p.y + p.h), 0); const leftoverHeight = Math.max(0, sheetH - maxY - spacing); return { placed, leftoverHeight }; }
+        function renderSingleSheet(pieces, sheetW, sheetH, sheetNum, totalSheets) { const ns = "http://www.w3.org/2000/svg", svg = document.createElementNS(ns, 'svg'); svg.setAttribute('width', '800'); svg.setAttribute('height', '540'); svg.setAttribute('viewBox', `0 0 ${sheetW} ${sheetH}`); svg.setAttribute('preserveAspectRatio', 'xMidYMid meet'); svg.style.cssText = 'background:#081424; border-radius:6px; display:block; margin-bottom:12px;'; svg.innerHTML = `<rect x="0" y="0" width="${sheetW}" height="${sheetH}" fill="#071729" />`; pieces.forEach(p => { svg.innerHTML += `<g><rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" fill="#e6f9ff" fill-opacity="0.06" stroke="#8fdcea" stroke-width="4" /><text x="${p.x + 12}" y="${p.y + 36}" font-size="36" fill="#eaf6fb">${p.w}×${p.h}</text><text x="${p.x + 12}" y="${p.y + 72}" font-size="28" fill="#95a6b6">Job ${p.job}</text></g>`; }); svg.innerHTML += `<rect x="0" y="0" width="${sheetW}" height="${sheetH}" fill="none" stroke="#173447" stroke-width="6" /><text x="15" y="40" font-size="42" fill="#eaf6fb" font-weight="bold">Sheet ${sheetNum} of ${totalSheets}</text>`; return svg; }
+
+        function renderAllLayouts() { const sheetW = 3330, sheetH = 2250, spacing = Number(layoutSpacing.value) || 10, allowR = allowRotate.value === '1'; sheetContainer.innerHTML = ''; if (!lastPiecesForLayout.length) { sheetInfo.textContent = 'Press Calculate All then Refresh Layout.'; return; } let piecesToPack = [...lastPiecesForLayout], sheetNum = 1, allSheetData = []; while (piecesToPack.length > 0) { const { placed, leftoverHeight } = packPiecesOnSheet(piecesToPack, sheetW, sheetH, spacing, allowR); allSheetData.push({ pieces: placed.filter(p => !p.overflow), leftoverHeight }); piecesToPack = placed.filter(p => p.overflow).map(({ x, y, w, h, rotated, overflow, ...rest }) => rest); sheetNum++; } const totalSheets = allSheetData.length; let infoHtml = `Requires <strong>${totalSheets}</strong> sheet(s).<br/><br/>`; allSheetData.forEach((data, index) => { const num = index + 1; sheetContainer.appendChild(renderSingleSheet(data.pieces, sheetW, sheetH, num, totalSheets)); infoHtml += `<b>Sheet ${num}:</b> ${data.pieces.length} pieces placed. Leftover area approx. ${sheetW} × ${round1(data.leftoverHeight)} mm.<br/>`; }); sheetInfo.innerHTML = infoHtml; }
+
+        refreshLayoutBtn.addEventListener('click', renderAllLayouts);
+        downloadLayoutBtn.addEventListener('click', () => { const svgs = sheetContainer.querySelectorAll('svg'); if (svgs.length === 0) return; const spacing = 50, sheetW = 3330; let totalHeight = 0; svgs.forEach(svg => { totalHeight += Number(svg.getAttribute('viewBox').split(' ')[3]) + spacing; }); let combinedSvg = `<svg width="800" height="${540 * svgs.length}" viewBox="0 0 ${sheetW} ${totalHeight}" xmlns="http://www.w3.org/2000/svg">`; let yOffset = 0; svgs.forEach(svg => { const sheetH = Number(svg.getAttribute('viewBox').split(' ')[3]); combinedSvg += `<g transform="translate(0, ${yOffset})">${svg.innerHTML}</g>`; yOffset += sheetH + spacing; }); combinedSvg += `</svg>`; const blob = new Blob([combinedSvg], { type: 'image/svg+xml;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'glass_layout_all_sheets.svg'; a.click(); URL.revokeObjectURL(url); });
+
+        function refreshProjectList() { /* ... */ } saveProjectBtn.addEventListener('click', () => { /* ... */ }); projectList.addEventListener('click', (ev) => { /* ... */ }); exportCsvBtn.addEventListener('click', () => { /* ... */ });
+
+        printBtn.addEventListener('click', () => {
+            if (perJobResults.textContent.includes('No calculations')) { alert('Please calculate jobs first to generate a report.'); return; } const logoHtml = document.querySelector('.logo-svg').outerHTML; reportLogoContainer.innerHTML = logoHtml; reportDate.textContent = new Date().toLocaleString(); const resultsHtml = `<h3>Per-window Results</h3>${perJobResults.innerHTML}<hr><h3>Stock & Totals</h3>${stockResults.innerHTML}`; jobReportContent.innerHTML = resultsHtml; jobReportPage.classList.remove('hidden');
+        });
+
+        reportCloseBtn.addEventListener('click', () => { jobReportPage.classList.add('hidden'); });
+        reportPrintBtn.addEventListener('click', () => { const printable = reportSheet.outerHTML; const styles = Array.from(document.styleSheets[0].cssRules).map(rule => rule.cssText).join(''); const win = window.open('', '_blank'); win.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Job Report</title><style>${styles}</style></head><body>${printable}</body></html>`); win.document.close(); setTimeout(() => { win.print(); }, 500); });
+
+        fb_send.addEventListener('click', () => { /* ... */ }); fb_save.addEventListener('click', () => { /* ... */ }); function refreshDashboard() { /* ... */ }
+
+        function openLeafModal(onSelect) { leafModal.classList.remove('hidden'); leafModal.setAttribute('aria-hidden', 'false'); leafOptions.querySelectorAll('button').forEach(b => b.classList.remove('active')); leafOptions.querySelector(`button[data-val="${currentLeaf}"]`)?.classList.add('active'); function choose(val) { currentLeaf = val; leafChosen.textContent = val.toUpperCase(); leafModal.classList.add('hidden'); if (onSelect) onSelect(val); } leafOptions.querySelectorAll('button').forEach(b => b.onclick = () => { leafOptions.querySelectorAll('button').forEach(x => x.classList.remove('active')); b.classList.add('active'); }); leafOk.onclick = () => { const sel = leafOptions.querySelector('button.active')?.dataset.val || 'normal'; choose(sel); renderJobs(); }; }
+
+        leafSelectBtn.addEventListener('click', () => { openLeafModal(null); });
+        makeEstimateBtn.addEventListener('click', () => { estimatePage.classList.remove('hidden'); estCompany.textContent = ''; estPersonnel.textContent = ''; estPhone.textContent = ''; estDate.textContent = new Date().toLocaleDateString(); estType.textContent = 'Window/Door Fabrication'; estTotalMaterial.textContent = ''; estWorkmanship.textContent = ''; estGrandTotal.textContent = ''; });
+        estClose.addEventListener('click', () => { estimatePage.classList.add('hidden'); });
+        estAddRow.addEventListener('click', () => { const c = estHeadRow.children.length, tr = document.createElement('tr'); for (let i = 0; i < c; i++) { const td = document.createElement('td'); td.contentEditable = "true"; tr.appendChild(td); } estBody.appendChild(tr); });
+        estAddCol.addEventListener('click', () => { const th = document.createElement('th'); th.contentEditable = "true"; estHeadRow.appendChild(th); Array.from(estBody.children).forEach(tr => { const td = document.createElement('td'); td.contentEditable = 'true'; tr.appendChild(td); }); });
+
+        estPrint.addEventListener('click', () => { const printable = document.getElementById('estimateSheet').outerHTML; const css = `<style>body{font-family:Inter,Arial;color:#031024;padding:20px} .estimate-header{display:flex;justify-content:space-between;align-items:flex-start} .est-company{font-weight:700;font-size:20px;margin-bottom:8px} table{border-collapse:collapse;width:100%} th,td{border:1px solid #d7e6ea;padding:8px;text-align:left;} .est-watermark{opacity:0.04;position:absolute;left:50%;top:45%;transform:translate(-50%,-50%) rotate(-12deg);font-size:72px;color:#062024}</style>`; const win = window.open('', '_blank'); win.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Estimate</title>${css}</head><body>${printable}</body></html>`); win.document.close(); setTimeout(() => { win.print(); }, 500); });
+        estDownload.addEventListener('click', () => { estPrint.click(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !estimatePage.classList.contains('hidden')) { estClose.click(); } if (e.key === 'Escape' && !jobReportPage.classList.contains('hidden')) { reportCloseBtn.click(); } });
+        window.addEventListener('beforeunload', () => { localStorage.setItem('saf_projects', JSON.stringify(projects)); });
+        langSel.value = localStorage.getItem('saf_lang') || 'en';
+        langSel.addEventListener('change', () => { localStorage.setItem('saf_lang', langSel.value); });
+        document.querySelector('.tab-btn[data-panel="glass"]').addEventListener('click', renderAllLayouts);
+        jobs.push({ id: uid(), label: 'Example', W: 1700, H: 1530, qty: 1, leafType: 'normal' });
+        renderJobs(); refreshProjectList(); refreshDashboard(); updatePiecesSummary();
+    </script>
+</body>
+
+</html>l
