@@ -6,6 +6,30 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Sign Up — Step in ALUFAB</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <meta property="og:title" content="StepinaLufab - Aluminium & Glass Fabrication Tools">
+    <meta property="og:description"
+        content="StepinaLufab makes calculations and planning easier for aluminium and glass fabricators.">
+    <meta property="og:image" content="https://stepinalufab.great-site.net/logo.alu.jpg">
+    <meta property="og:url" content="https://stepinalufab.great-site.net">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="StepinaLufab - Aluminium & Glass Fabrication Tools">
+    <meta name="twitter:description"
+        content="StepinaLufab makes calculations and planning easier for aluminium and glass fabricators.">
+    <meta name="twitter:image" content="https://stepinalufab.great-site.net/logo.alu.jpg">
+    <meta name="twitter:site" content="@StepinaLufab">
+
+    <meta name="pinterest-rich-pin" content="true">
+
+    <meta property="og:title" content="StepinaLufab - Aluminium & Glass Fabrication Tools">
+    <meta property="og:description"
+        content="StepinaLufab makes calculations and planning easier for aluminium and glass fabricators.">
+    <meta property="og:image" content="https://stepinalufab.great-site.net/logo.alu.jpg">
+    <meta property="og:url" content="https://stepinalufab.great-site.net">
+
+
     <style>
         :root {
             --bg: #071028;
@@ -16,7 +40,7 @@
             --input-bg: #0f1f33;
         }
 
-        code Code * {
+        * {
             box-sizing: border-box;
         }
 
@@ -145,8 +169,6 @@
 </head>
 
 <body>
-    code
-    Code
     <header>
         <a href="index.html" class="logo-text">
             <img src="logo.alu.jpg" alt="Logo" style="height: 130px; width: 300px; object-fit: contain;">
@@ -189,16 +211,29 @@
         document.getElementById('signupForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
-            const name = document.getElementById('nameInput').value;
-            const email = document.getElementById('emailInput').value;
+            const name = document.getElementById('nameInput').value.trim();
+            const email = document.getElementById('emailInput').value.trim().toLowerCase(); // Normalize email
             const pass = document.getElementById('passInput').value;
 
             if (name && email && pass) {
+                let users = JSON.parse(localStorage.getItem('saf_users_db')) || {};
+
+
+                if (users.hasOwnProperty(email)) {
+                    alert("This email is already registered. Please go to Login.");
+                    return;
+                }
+
+                users[email] = {
+                    name: name,
+                    password: pass
+                };
+                localStorage.setItem('saf_users_db', JSON.stringify(users));
 
                 sessionStorage.setItem('saf_logged_in', 'true');
-
                 sessionStorage.setItem('saf_username', name);
 
+                alert("Account created successfully!");
                 window.location.href = 'alufab-sliding.windows-doors.html';
             } else {
                 alert("Please fill in all fields.");

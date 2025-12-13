@@ -4,8 +4,32 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Login — Step in ALUFAB</title>
+    <title>Log In — Step in ALUFAB</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <meta property="og:title" content="StepinaLufab - Aluminium & Glass Fabrication Tools">
+    <meta property="og:description"
+        content="StepinaLufab makes calculations and planning easier for aluminium and glass fabricators.">
+    <meta property="og:image" content="https://stepinalufab.great-site.net/logo.alu.jpg">
+    <meta property="og:url" content="https://stepinalufab.great-site.net">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="StepinaLufab - Aluminium & Glass Fabrication Tools">
+    <meta name="twitter:description"
+        content="StepinaLufab makes calculations and planning easier for aluminium and glass fabricators.">
+    <meta name="twitter:image" content="https://stepinalufab.great-site.net/logo.alu.jpg">
+    <meta name="twitter:site" content="@StepinaLufab">
+
+    <meta name="pinterest-rich-pin" content="true">
+
+    <meta property="og:title" content="StepinaLufab - Aluminium & Glass Fabrication Tools">
+    <meta property="og:description"
+        content="StepinaLufab makes calculations and planning easier for aluminium and glass fabricators.">
+    <meta property="og:image" content="https://stepinalufab.great-site.net/logo.alu.jpg">
+    <meta property="og:url" content="https://stepinalufab.great-site.net">
+
+
     <style>
         :root {
             --bg: #071028;
@@ -103,7 +127,7 @@
             border-color: var(--accent);
         }
 
-        .btn-login {
+        .btn-signup {
             width: 100%;
             background: var(--accent);
             color: #062024;
@@ -116,7 +140,7 @@
             margin-top: 8px;
         }
 
-        .btn-login:hover {
+        .btn-signup:hover {
             opacity: 0.9;
         }
 
@@ -145,7 +169,6 @@
 </head>
 
 <body>
-
     <header>
         <a href="index.html" class="logo-text">
             <img src="logo.alu.jpg" alt="Logo" style="height: 130px; width: 300px; object-fit: contain;">
@@ -155,20 +178,19 @@
     <div class="auth-container">
         <div class="auth-card">
             <h1>Welcome Back</h1>
-            <p class="subtitle">Log in to access your calculators.</p>
-
+            <p class="subtitle">Enter your details to access your account.</p>
 
             <form id="loginForm">
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" id="emailInput" placeholder="name@example.com" required>
+                    <input type="email" id="loginEmail" placeholder="name@example.com" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" id="passInput" placeholder="••••••••" required>
+                    <input type="password" id="loginPass" placeholder="Enter password" required>
                 </div>
 
-                <button type="submit" class="btn-login">Log In</button>
+                <button type="submit" class="btn-signup">Log In</button>
             </form>
 
             <div class="links">
@@ -185,20 +207,27 @@
         document.getElementById('loginForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
-            // 2. Get the values
-            const email = document.getElementById('emailInput').value;
-            const pass = document.getElementById('passInput').value;
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('loginPass').value;
 
-            if (email && pass) {
-                sessionStorage.setItem('saf_logged_in', 'true');
+            const users = JSON.parse(localStorage.getItem('saf_users_db')) || {};
 
-                window.location.href = 'alufab-sliding.windows-doors.html';
+            if (users.hasOwnProperty(email)) {
+
+                if (users[email].password === pass) {
+                    sessionStorage.setItem('saf_logged_in', 'true');
+                    sessionStorage.setItem('saf_username', users[email].name);
+
+                    window.location.href = 'alufab-sliding.windows-doors.html';
+                } else {
+                    alert("Incorrect password. Please try again.");
+                }
+
             } else {
-                alert("Please enter your email and password.");
+                alert("This email is not registered. You cannot login without signing up first.");
             }
         });
     </script>
-
 </body>
 
 </html>

@@ -13,6 +13,29 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
+    <meta property="og:title" content="StepinaLufab - Aluminium & Glass Fabrication Tools">
+    <meta property="og:description"
+        content="StepinaLufab makes calculations and planning easier for aluminium and glass fabricators.">
+    <meta property="og:image" content="https://stepinalufab.great-site.net/logo.alu.jpg">
+    <meta property="og:url" content="https://stepinalufab.great-site.net">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="StepinaLufab - Aluminium & Glass Fabrication Tools">
+    <meta name="twitter:description"
+        content="StepinaLufab makes calculations and planning easier for aluminium and glass fabricators.">
+    <meta name="twitter:image" content="https://stepinalufab.great-site.net/logo.alu.jpg">
+    <meta name="twitter:site" content="@StepinaLufab">
+
+    <meta name="pinterest-rich-pin" content="true">
+
+    <meta property="og:title" content="StepinaLufab - Aluminium & Glass Fabrication Tools">
+    <meta property="og:description"
+        content="StepinaLufab makes calculations and planning easier for aluminium and glass fabricators.">
+    <meta property="og:image" content="https://stepinalufab.great-site.net/logo.alu.jpg">
+    <meta property="og:url" content="https://stepinalufab.great-site.net">
+
+
     <style>
         :root {
             --bg: #071028;
@@ -315,14 +338,7 @@
             flex-wrap: wrap
         }
 
-        .close-est {
-            background: transparent;
-            border: 1px solid #d7e6ea;
-            color: #062024;
-            padding: 6px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
+
 
         .estimate-page {
             position: fixed;
@@ -608,12 +624,12 @@
 
                 <a href="index.html" class="btn-ghost">Home</a>
 
+
                 <button class="tab-btn active" data-panel="calculator">Calculator</button>
-                <button class="tab-btn" data-panel="glass">Glass Layout</button>
                 <button class="tab-btn" data-panel="dashboard">Dashboard</button>
                 <button class="tab-btn" data-panel="about">About</button>
                 <button class="tab-btn" data-panel="feedback">Feedback</button>
-                <button id="makeEstimateBtn" class="btn" title="Create estimate">Make Estimate</button>
+                <a href="est.html" class="btn">Make Estimate</a>
                 <select id="langSel" title="Language" style="margin-left:8px">
                     <option value="en">EN</option>
                     <option value="ak">AK</option>
@@ -630,6 +646,7 @@
                         <button class="btn" id="calcAllBtn">Calculate All</button>
                         <button class="btn-ghost" id="exportCsvBtn">Export CSV</button>
                         <button class="btn-ghost" id="printBtn">View Report</button>
+                        <button class="btn-ghost" id="glass">Glass Layout</button>
                         <button class="btn-ghost" id="saveProjectBtn">Save Project</button>
                         <div style="margin-left:auto" class="controls">
                             <div style="width:120px"><label>Mode</label><select id="modeSelect">
@@ -795,89 +812,6 @@
         </div>
     </div>
 
-    <div id="estimatePage" class="hidden" aria-hidden="true">
-        <div class="estimate-page">
-            <div class="estimate-sheet" role="document" id="estimateSheet">
-                <div class="est-watermark">StepInAluFab</div>
-                <div class="estimate-header">
-                    <div>
-                        <div class="est-company" id="estCompany" contenteditable="true"
-                            placeholder="Type Your Company Name Here"></div>
-                        <div class="est-meta">
-                            <div><span style="font-weight:600">Company Owner:</span> <span id="estPersonnel"
-                                    contenteditable="true"> </span></div>
-                            <div><span style="font-weight:600">Phone:</span> <span id="estPhone" contenteditable="true">
-                                </span></div>
-                        </div>
-                    </div>
-                    <div style="text-align:right">
-
-                        <img src="C:\Users\Mr. Wagya Stephen\Pictures\Saved Pictures\logo.alu.jpg"
-                            alt="StepInAluFab Logo" style="width: 140px; height: auto; margin-bottom: 8px;">
-
-                        <div style="font-size:13px;margin-top:6px;">
-                            <div><strong>Date:</strong> <span id="estDate" contenteditable="true"></span></div>
-                            <div><strong>Estimate Type:</strong> <span id="estType" contenteditable="true"> </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="est-toolbar" style="margin-top:18px; flex-wrap:wrap;">
-                    <div style="display:flex;gap:8px;align-items:center;"><button id="estAddRow" class="btn-ghost">+ Add
-                            Row</button><button id="estAddCol" class="btn-ghost">+ Add Column</button></div>
-                    <div style="margin-left:auto;display:flex;gap:8px;"><button id="estPrint"
-                            class="btn">Print</button><button id="estDownload" class="btn-ghost">Download
-                            PDF</button><button id="estClose" class="close-est">Close</button></div>
-                </div>
-                <div style="overflow:auto;">
-                    <table class="est-table" id="estTable" aria-label="Estimate table">
-                        <thead>
-                            <tr id="estHeadRow">
-                                <th contenteditable="true"></th>
-                                <th contenteditable="true"></th>
-                                <th contenteditable="true"></th>
-                                <th contenteditable="true"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="estBody">
-                            <tr>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                            </tr>
-                            <tr>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="est-controls">
-                    <div style="max-width:60%">
-                        <div style="margin-top:12px;">
-                            <div><strong>Notes / Terms:</strong></div>
-                            <div contenteditable="true"
-                                style="min-height:48px;border:1px dashed #d7e6ea;padding:8px;margin-top:8px;">Type notes
-                                here...</div>
-                        </div>
-                    </div>
-                    <div style="width:35%;">
-                        <div class="est-totals">
-                            <div>Total Cost of Material: <span id="estTotalMaterial" contenteditable="true"> </span>
-                            </div>
-                            <div style="margin-top:8px;">Workmanship: <span id="estWorkmanship" contenteditable="true">
-                                </span></div>
-                            <div style="margin-top:8px;font-size:18px;">Grand Total: <span id="estGrandTotal"
-                                    contenteditable="true"> </span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div id="jobReportPage" class="hidden">
         <div class="report-page">
@@ -1004,4 +938,4 @@
     </script>
 </body>
 
-</html>l
+</html>

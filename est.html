@@ -8,6 +8,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
+
+    <meta property="og:title" content="StepinaLufab - Aluminium & Glass Fabrication Tools">
+    <meta property="og:description"
+        content="StepinaLufab makes calculations and planning easier for aluminium and glass fabricators.">
+    <meta property="og:image" content="https://stepinalufab.great-site.net/logo.alu.jpg">
+    <meta property="og:url" content="https://stepinalufab.great-site.net">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="StepinaLufab - Aluminium & Glass Fabrication Tools">
+    <meta name="twitter:description"
+        content="StepinaLufab makes calculations and planning easier for aluminium and glass fabricators.">
+    <meta name="twitter:image" content="https://stepinalufab.great-site.net/logo.alu.jpg">
+    <meta name="twitter:site" content="@StepinaLufab">
+
+    <meta name="pinterest-rich-pin" content="true">
+
+    <meta property="og:title" content="StepinaLufab - Aluminium & Glass Fabrication Tools">
+    <meta property="og:description"
+        content="StepinaLufab makes calculations and planning easier for aluminium and glass fabricators.">
+    <meta property="og:image" content="https://stepinalufab.great-site.net/logo.alu.jpg">
+    <meta property="og:url" content="https://stepinalufab.great-site.net">
+
+
     <style>
         :root {
             --bg: #071028;
@@ -171,6 +195,15 @@
             margin-bottom: 30px;
         }
 
+        .close-est {
+            background: transparent;
+            border: 1px solid #d7e6ea;
+            color: #062024;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
         .est-company {
             font-weight: 700;
             font-size: 24px;
@@ -221,12 +254,21 @@
             text-align: right;
         }
 
+        /* FIXED LAYOUT FOR BOTTOM CONTROLS */
         .est-controls-area {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-top: 30px;
             gap: 20px;
+        }
+
+        .est-notes-section {
+            width: 60%;
+        }
+
+        .est-totals-section {
+            width: 35%;
         }
 
         .est-totals {
@@ -289,9 +331,15 @@
                 flex-direction: column;
             }
 
+            .est-notes-section,
+            .est-totals-section {
+                width: 100%;
+            }
+
             .est-totals {
                 text-align: left;
                 width: 100%;
+                margin-top: 20px;
             }
         }
     </style>
@@ -308,129 +356,131 @@
                 <a href="index.html">Home</a>
                 <a href="tools.html" class="active">Back to Tools</a>
                 <a href="contact.html">Contact</a>
-            </nav>
-        </header>
 
-        <main>
-            <div style="text-align: center; margin-bottom: 24px;">
-                <h1 style="margin: 0; font-size: 28px;">Job Cost Estimator</h1>
-                <p style="color: var(--muted); margin-top: 8px;">Edit the fields directly on the paper below, then print
-                    or save as PDF.</p>
+
+
+    </div>
+    </nav>
+    </header>
+
+    <main>
+        <div style="text-align: center; margin-bottom: 24px;">
+            <h1 style="margin: 0; font-size: 28px;">Job Cost Estimator</h1>
+            <p style="color: var(--muted); margin-top: 8px;">Edit the fields directly on the paper below, then print
+                or save as PDF.</p>
+        </div>
+
+        <div class="toolbar-container">
+            <div class="tool-group">
+                <button id="estAddRow" class="btn-ghost">
+                    <i class="ph ph-plus"></i> Add Row
+                </button>
+                <button id="estAddCol" class="btn-ghost">
+                    <i class="ph ph-columns"></i> Add Column
+                </button>
             </div>
-
-            <div class="toolbar-container">
-                <div class="tool-group">
-                    <button id="estAddRow" class="btn-ghost">
-                        <i class="ph ph-plus"></i> Add Row
-                    </button>
-                    <button id="estAddCol" class="btn-ghost">
-                        <i class="ph ph-columns"></i> Add Column
-                    </button>
-                </div>
-                <div class="tool-group">
-                    <button id="estPrint" class="btn">
-                        <i class="ph ph-printer"></i> Print / Save PDF
-                    </button>
-                </div>
+            <div class="tool-group">
+                <button id="estPrint" class="btn">
+                    <i class="ph ph-printer"></i> Print / Save PDF
+                </button>
             </div>
+        </div>
 
-            <div class="sheet-container">
-                <div class="estimate-sheet" id="estimateSheet">
-                    <div class="est-watermark">StepInAluFab</div>
+        <div class="sheet-container">
+            <div class="estimate-sheet" id="estimateSheet">
+                <div class="est-watermark">StepInAluFab</div>
 
-                    <div class="estimate-header">
-                        <div style="flex: 1;">
-                            <div class="est-company" contenteditable="true">
-                                Your Company Name Here
-                            </div>
-                            <div class="est-meta">
-                                <div><span style="font-weight:600">Company Owner:</span> <span contenteditable="true">
-                                        [Name]</span></div>
-                                <div><span style="font-weight:600">Phone:</span> <span contenteditable="true">
-                                        [Phone]</span></div>
-                                <div><span style="font-weight:600">Client Name:</span> <span contenteditable="true">
-                                        [Client Name]</span></div>
-                            </div>
+                <div class="estimate-header">
+                    <div style="flex: 1;">
+                        <div class="est-company" contenteditable="true">
+                            Your Company Name Here
                         </div>
-
-                        <div style="text-align:right">
-                            <img src="logo.alu.jpg" alt="Logo" style="width: 120px; height: auto; margin-bottom: 12px;">
-
-                            <div style="font-size:13px; color: #555;">
-                                <div><strong>Date:</strong> <span id="estDate" contenteditable="true"></span></div>
-                                <div><strong>Est. Type:</strong> <span contenteditable="true">Fabrication Quote</span>
-                                </div>
-                                <div><strong>Ref #:</strong> <span contenteditable="true">001</span></div>
-                            </div>
+                        <div class="est-meta">
+                            <div><span style="font-weight:600">Company Owner:</span> <span contenteditable="true">
+                                    [Name]</span></div>
+                            <div><span style="font-weight:600">Phone:</span> <span contenteditable="true">
+                                    [Phone]</span></div>
+                            <div><span style="font-weight:600">Client Name:</span> <span contenteditable="true">
+                                    [Client Name]</span></div>
                         </div>
                     </div>
 
-                    <table class="est-table" id="estTable">
-                        <thead>
-                            <tr id="estHeadRow">
-                                <th contenteditable="true"></th>
-                                <th contenteditable="true"></th>
-                                <th contenteditable="true"></th>
-                                <th contenteditable="true"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="estBody">
-                            <tr>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                            </tr>
-                            <tr>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                            </tr>
-                            <tr>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                            </tr>
-                            <tr>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                                <td contenteditable="true"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div style="text-align:right">
+                        <img src="logo.alu.jpg" alt="Logo" style="width: 120px; height: auto; margin-bottom: 12px;">
 
+                        <div style="font-size:13px; color: #555;">
+                            <div><strong>Date:</strong> <span id="estDate" contenteditable="true"></span></div>
+                            <div><strong>Est. Type:</strong> <span contenteditable="true">Fabrication Quote</span>
+                            </div>
+                            <div><strong>Ref #:</strong> <span contenteditable="true">001</span></div>
+                        </div>
+                    </div>
+                </div>
 
-                    <div class="est-controls">
-                        <div style="max-width:60%">
-                            <div style="margin-top:12px;">
-                                <div><strong>Notes / Terms:</strong></div>
-                                <div contenteditable="true"
-                                    style="min-height:48px;border:1px dashed #d7e6ea;padding:8px;margin-top:8px;">Type
-                                    notes
-                                    here...</div>
+                <table class="est-table" id="estTable">
+                    <thead>
+                        <tr id="estHeadRow">
+                            <th contenteditable="true"></th>
+                            <th contenteditable="true"></th>
+                            <th contenteditable="true"></th>
+                            <th contenteditable="true"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="estBody">
+                        <tr>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                        </tr>
+                        <tr>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                                <br>
-                                <div><span style="font-weight:600">Subtotal:</span> <span contenteditable="true"></br>
-                                        [Cost Of Materials]</span></div>
+                <div class="est-controls-area">
+                    <div class="est-notes-section">
+                        <div><strong>Notes / Terms:</strong></div>
+                        <div id="notesInput" contenteditable="true"
+                            style="min-height:48px;border:1px dashed #d7e6ea;padding:8px;margin-top:8px;">Type
+                            notes here...</div>
+                    </div>
 
-                                <div style="width: 35%;">
-                                    <div class="est-totals">
-                                        <div>Workmanship/Labor: <span contenteditable="true"></span></div>
-                                        <div class="est-grand-total">Grand Total: <span contenteditable="true"></span>
-                                        </div>
-                                    </div>
-                                </div>
+                    <br>
+                    <div><span style="font-weight:600">Subtotal:</span> <span contenteditable="true"></br>
+                            [Cost Of Materials]</span></div>
+
+                    <div style="width: 35%;">
+                        <div class="est-totals">
+                            <div>Workmanship/Labor: <span contenteditable="true"></span></div>
+                            <div class="est-grand-total">Grand Total: <span contenteditable="true"></span>
                             </div>
                         </div>
                     </div>
-        </main>
+                </div>
+            </div>
+        </div>
+    </main>
 
-        <footer style="text-align: center; color: var(--muted); font-size: 13px; margin-top: 40px;">
-            &copy; 2025 StepInAluFab.
-        </footer>
+    <footer style="text-align: center; color: var(--muted); font-size: 13px; margin-top: 40px;">
+        &copy; 2025 StepInAluFab.
+    </footer>
     </div>
 
     <script>
@@ -469,7 +519,9 @@
 
         document.getElementById('estPrint').addEventListener('click', () => {
             const sheetContent = document.getElementById('estimateSheet').outerHTML;
-            const notesText = document.getElementById('notesInput').innerText.trim();
+
+            const notesEl = document.getElementById('notesInput');
+            const notesText = notesEl ? notesEl.innerText.trim() : "";
 
             let printStyles = `
                 <style>
@@ -480,8 +532,10 @@
                         -webkit-print-color-adjust: exact; 
                     }
                     .estimate-sheet { width: 100%; max-width: 100%; }
-                    .est-header { display: flex; justify-content: space-between; }
                     
+                    /* HIDE THE PLACEHOLDER BORDER ON PRINT */
+                    #notesInput { border: 1px solid #eee !important; }
+
                     :root { --accent: #06b6d4; --ink: #031024; }
 
                     .estimate-header { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 30px; }
@@ -496,24 +550,21 @@
                         background-color: #f4fbfd !important; 
                         font-weight: 600; 
                         height: 30px;
-                        text-align: center; /* Headers Center */
-                    }
-                    
-                    td { 
-                        border: 1px solid #ddd; padding: 10px; height: 30px; 
-                    }
-
-                    /* First Two Columns: Center */
-                    td:nth-child(1), td:nth-child(2) {
                         text-align: center;
                     }
+                    
+                    td { border: 1px solid #ddd; padding: 10px; height: 30px; }
+
+                    /* First Two Columns: Center */
+                    td:nth-child(1), td:nth-child(2) { text-align: center; }
 
                     /* Last Two Columns: Right */
-                    td:nth-last-child(1), td:nth-last-child(2) {
-                        text-align: right;
-                    }
+                    td:nth-last-child(1), td:nth-last-child(2) { text-align: right; }
 
                     .est-controls-area { display: flex; justify-content: space-between; margin-top: 30px; }
+                    .est-notes-section { width: 60%; }
+                    .est-totals-section { width: 35%; }
+
                     .est-totals { text-align: right; }
                     .est-grand-total { font-size: 18px; font-weight: bold; border-top: 2px solid #000; padding-top: 10px; margin-top: 10px; }
                     
@@ -525,8 +576,8 @@
                     }
             `;
 
-            if (!notesText) {
-                printStyles += ` #notesSection { display: none !important; } `;
+            if (!notesText || notesText === "Type notes here...") {
+                printStyles += ` #notesInput { display: none !important; } `;
             }
 
             printStyles += `</style>`;
