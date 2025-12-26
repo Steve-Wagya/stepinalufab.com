@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Job Cost Estimator — Step in ALUFAB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        :root {
+            --bg: #071028;
+            --panel: #0b1624;
+            --accent: #06b6d4;
+            --muted: #95a6b6;
+            --card: #071726;
+            --text: #eaf6fb;
+            --paper: #ffffff;
+            --ink: #031024;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            padding-bottom: 40px;
+        }
+
+        .wrap {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 12px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            margin-bottom: 24px;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 130px;
+            width: 300px;
+            object-fit: contain;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+
+        nav a:hover {
+            color: var(--text);
+        }
+
+        .toolbar-container {
+            background: var(--panel);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .tool-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn {
+            background: var(--accent);
+            color: #062024;
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text);
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sheet-container {
+            width: 100%;
+            overflow-x: auto;
+            padding-bottom: 20px;
+        }
+
+        .estimate-sheet {
+            max-width: 900px;
+            min-width: 700px;
+            margin: 0 auto;
+            background: var(--paper);
+            color: var(--ink);
+            padding: 40px;
+            border-radius: 4px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .est-watermark {
+            position: absolute;
+            left: 50%;
+            top: 45%;
+            transform: translate(-50%, -50%) rotate(-12deg);
+            opacity: 0.06;
+            font-size: 72px;
+            color: var(--ink);
+            pointer-events: none;
+            user-select: none;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .estimate-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .est-company {
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 8px;
+            min-width: 250px;
+        }
+
+        .est-meta {
+            font-size: 14px;
+            color: #405662;
+            line-height: 1.6;
+        }
+
+        .est-table {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .est-table th,
+        .est-table td {
+            border: 1px solid #d7e6ea;
+            padding: 10px 12px;
+            vertical-align: top;
+            height: 40px;
+            width: 25%;
+        }
+
+        .est-table th {
+            background: #f4fbfd;
+            color: var(--ink);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .est-table td:nth-child(1),
+        .est-table td:nth-child(2) {
+            text-align: center;
+        }
+
+        .est-table td:nth-last-child(1),
+        .est-table td:nth-last-child(2) {
+            text-align: right;
+        }
+
+        .est-controls-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 30px;
+            gap: 20px;
+        }
+
+        .est-totals {
+            text-align: right;
+            font-weight: 700;
+            color: var(--ink);
+            background: #fcfdfe;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .est-totals div {
+            margin-bottom: 8px;
+        }
+
+        .est-grand-total {
+            margin-top: 12px;
+            font-size: 18px;
+            border-top: 2px solid #06b6d4;
+            padding-top: 8px;
+        }
+
+        [contenteditable="true"]:hover {
+            background-color: rgba(6, 182, 212, 0.05);
+            outline: 1px dashed #ccc;
+            cursor: text;
+        }
+
+        [contenteditable="true"]:focus {
+            background-color: rgba(6, 182, 212, 0.1);
+            outline: 2px solid var(--accent);
+            border-radius: 2px;
+        }
+
+        @media(max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .toolbar-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .tool-group {
+                justify-content: space-between;
+            }
+
+            .estimate-sheet {
+                padding: 20px;
+            }
+
+            .estimate-header {
+                flex-direction: column;
+            }
+
+            .est-controls-area {
+                flex-direction: column;
+            }
+
+            .est-totals {
+                text-align: left;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <header>
+            <a href="index.html" class="logo-link">
+                <img src="C:\Users\Mr. Wagya Stephen\Pictures\Saved Pictures\logo.alu.jpg" alt="Step In ALUFAB"
+                    class="logo-img">
+            </a>
+
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="tools.html" class="active">Back to Tools</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </header>
+
+        <main>
+            <div style="text-align: center; margin-bottom: 24px;">
+                <h1 style="margin: 0; font-size: 28px;">Job Cost Estimator</h1>
+                <p style="color: var(--muted); margin-top: 8px;">Edit the fields directly on the paper below, then print
+                    or save as PDF.</p>
+            </div>
+
+            <div class="toolbar-container">
+                <div class="tool-group">
+                    <button id="estAddRow" class="btn-ghost">
+                        <i class="ph ph-plus"></i> Add Row
+                    </button>
+                    <button id="estAddCol" class="btn-ghost">
+                        <i class="ph ph-columns"></i> Add Column
+                    </button>
+                </div>
+                <div class="tool-group">
+                    <button id="estPrint" class="btn">
+                        <i class="ph ph-printer"></i> Print / Save PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="sheet-container">
+                <div class="estimate-sheet" id="estimateSheet">
+                    <div class="est-watermark">StepInAluFab</div>
+
+                    <div class="estimate-header">
+                        <div style="flex: 1;">
+                            <div class="est-company" contenteditable="true">
+                                Your Company Name Here
+                            </div>
+                            <div class="est-meta">
+                                <div><span style="font-weight:600">Company Owner:</span> <span contenteditable="true">
+                                        [Name]</span></div>
+                                <div><span style="font-weight:600">Phone:</span> <span contenteditable="true">
+                                        [Phone]</span></div>
+                                <div><span style="font-weight:600">Client Name:</span> <span contenteditable="true">
+                                        [Client Name]</span></div>
+                            </div>
+                        </div>
+
+                        <div style="text-align:right">
+                            <img src="C:\Users\Mr. Wagya Stephen\Pictures\Saved Pictures\logo.alu.jpg" alt="Logo"
+                                style="width: 120px; height: auto; margin-bottom: 12px;">
+
+                            <div style="font-size:13px; color: #555;">
+                                <div><strong>Date:</strong> <span id="estDate" contenteditable="true"></span></div>
+                                <div><strong>Est. Type:</strong> <span contenteditable="true">Fabrication Quote</span>
+                                </div>
+                                <div><strong>Ref #:</strong> <span contenteditable="true">001</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="est-table" id="estTable">
+                        <thead>
+                            <tr id="estHeadRow">
+                                <th contenteditable="true"></th>
+                                <th contenteditable="true"></th>
+                                <th contenteditable="true"></th>
+                                <th contenteditable="true"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="estBody">
+                            <tr>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                            </tr>
+                            <tr>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                            </tr>
+                            <tr>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                            </tr>
+                            <tr>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                                <td contenteditable="true"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    <div class="est-controls">
+                        <div style="max-width:60%">
+                            <div style="margin-top:12px;">
+                                <div><strong>Notes / Terms:</strong></div>
+                                <div contenteditable="true"
+                                    style="min-height:48px;border:1px dashed #d7e6ea;padding:8px;margin-top:8px;">Type
+                                    notes
+                                    here...</div>
+
+                                <br>
+                                <div><span style="font-weight:600">Subtotal:</span> <span contenteditable="true"></br>
+                                        [Cost Of Materials]</span></div>
+
+                                <div style="width: 35%;">
+                                    <div class="est-totals">
+                                        <div>Workmanship/Labor: <span contenteditable="true"></span></div>
+                                        <div class="est-grand-total">Grand Total: <span contenteditable="true"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </main>
+
+        <footer style="text-align: center; color: var(--muted); font-size: 13px; margin-top: 40px;">
+            &copy; 2025 StepInAluFab.
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('estDate').textContent = new Date().toLocaleDateString();
+
+        document.getElementById('estAddRow').addEventListener('click', () => {
+            const tableBody = document.getElementById('estBody');
+            const headRow = document.getElementById('estHeadRow');
+            const columnCount = headRow.children.length;
+
+            const newRow = document.createElement('tr');
+            for (let i = 0; i < columnCount; i++) {
+                const td = document.createElement('td');
+                td.contentEditable = "true";
+                newRow.appendChild(td);
+            }
+            tableBody.appendChild(newRow);
+        });
+
+        document.getElementById('estAddCol').addEventListener('click', () => {
+            const headRow = document.getElementById('estHeadRow');
+            const tableBody = document.getElementById('estBody');
+
+            const th = document.createElement('th');
+            th.contentEditable = "true";
+            headRow.appendChild(th);
+
+            Array.from(tableBody.children).forEach(row => {
+                const td = document.createElement('td');
+                td.contentEditable = "true";
+                row.appendChild(td);
+            });
+
+            document.getElementById('estTable').style.tableLayout = 'fixed';
+        });
+
+        document.getElementById('estPrint').addEventListener('click', () => {
+            const sheetContent = document.getElementById('estimateSheet').outerHTML;
+            const notesText = document.getElementById('notesInput').innerText.trim();
+
+            let printStyles = `
+                <style>
+                    body { 
+                        font-family: Inter, Arial, sans-serif; 
+                        padding: 20px; 
+                        color: #031024;
+                        -webkit-print-color-adjust: exact; 
+                    }
+                    .estimate-sheet { width: 100%; max-width: 100%; }
+                    .est-header { display: flex; justify-content: space-between; }
+                    
+                    :root { --accent: #06b6d4; --ink: #031024; }
+
+                    .estimate-header { display: flex; justify-content: space-between; gap: 20px; margin-bottom: 30px; }
+                    .est-company { font-weight: 700; font-size: 24px; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; }
+                    .est-meta { font-size: 14px; line-height: 1.5; color: #444; }
+                    
+                    /* Table Styles & Alignment */
+                    table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+                    
+                    th { 
+                        border: 1px solid #ddd; padding: 10px; 
+                        background-color: #f4fbfd !important; 
+                        font-weight: 600; 
+                        height: 30px;
+                        text-align: center; /* Headers Center */
+                    }
+                    
+                    td { 
+                        border: 1px solid #ddd; padding: 10px; height: 30px; 
+                    }
+
+                    /* First Two Columns: Center */
+                    td:nth-child(1), td:nth-child(2) {
+                        text-align: center;
+                    }
+
+                    /* Last Two Columns: Right */
+                    td:nth-last-child(1), td:nth-last-child(2) {
+                        text-align: right;
+                    }
+
+                    .est-controls-area { display: flex; justify-content: space-between; margin-top: 30px; }
+                    .est-totals { text-align: right; }
+                    .est-grand-total { font-size: 18px; font-weight: bold; border-top: 2px solid #000; padding-top: 10px; margin-top: 10px; }
+                    
+                    .est-watermark { 
+                        position: absolute; left: 50%; top: 40%; 
+                        transform: translate(-50%, -50%) rotate(-15deg); 
+                        font-size: 80px; opacity: 0.05; font-weight: 800; 
+                        color: #000; z-index: -1;
+                    }
+            `;
+
+            if (!notesText) {
+                printStyles += ` #notesSection { display: none !important; } `;
+            }
+
+            printStyles += `</style>`;
+
+            const win = window.open('', '_blank');
+            win.document.write(`
+                <html>
+                    <head>
+                        <title>Print Estimate</title>
+                        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+                        ${printStyles}
+                    </head>
+                    <body>
+                        ${sheetContent}
+                        <script>
+                            setTimeout(() => { window.print(); window.close(); }, 800);
+                        <\/script>
+                    </body>
+                </html>
+            `);
+            win.document.close();
+        });
+    </script>
+</body>
+
+</html>
